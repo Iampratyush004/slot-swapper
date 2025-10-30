@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  events    Event[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Event {
+  id         String      @id @default(cuid())
+  title      String
+  startTime  DateTime
+  endTime    DateTime
+  status     String      @default("BUSY")
+  ownerId    String
+  owner      User        @relation(fields: [ownerId], references: [id])
+
+  // For clarity in queries
+  outgoingRequests SwapRequest[] @relation("UserSlot")
+  incomingRequests SwapRequest[] @relation("TheirSlot")
+}
+
+model SwapRequest {
+  id          String     @id @default(cuid())
+  requesterId String
+  responderId String
+
+  mySlotId    String
+  mySlot      Event      @relation("UserSlot", fields: [mySlotId], references: [id])
+
+  theirSlotId String
+  theirSlot   Event      @relation("TheirSlot", fields: [theirSlotId], references: [id])
+
+  status      String     @default("PENDING")
+  createdAt   DateTime   @default(now())
+}
+
+/// Audit history of completed or rejected swaps. No foreign keys to Events so deletions won't fail.
+model SwapHistory {
+  id            String   @id @default(cuid())
+  requesterId   String
+  responderId   String
+  mySlotId      String
+  theirSlotId   String
+  mySlotTitle   String
+  theirSlotTitle String
+  status        String   // ACCEPTED or REJECTED
+  decidedAt     DateTime @default(now())
+}
+
+
