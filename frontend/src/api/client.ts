@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = (import.meta as any).env.VITE_API_URL || "http://localhost:4000/api";
+const baseURL = (import.meta as any).env.VITE_API_URL || "https://slot-swapper-2hg7.onrender.com/api";
 
 export const api = axios.create({ baseURL });
 
