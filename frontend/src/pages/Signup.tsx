@@ -25,7 +25,8 @@ export function Signup() {
       if (err) {
         if (err.fieldErrors) {
           const allFields = Object.values(err.fieldErrors).flat();
-          if (allFields.length > 0) msg = allFields[0];
+          
+          if (allFields.length > 0) msg = String(allFields[0]);
         }
         if (!msg && Array.isArray(err.formErrors) && err.formErrors.length > 0) {
           msg = err.formErrors[0];
