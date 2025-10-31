@@ -13,10 +13,14 @@ export const app = express();
 
 app.use(
   cors({
-    origin: ["https://slotswap.netlify.app/", "http://localhost:5173"], // adjust for your frontend URLs
+    origin: ["https://slotswap.netlify.app", "http://localhost:5173"],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 200,
   })
 );
+
 
 app.use(express.json());
 
