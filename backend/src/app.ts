@@ -11,7 +11,13 @@ dotenv.config();
 
 export const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://slotswap.netlify.app/", "http://localhost:5173"], // adjust for your frontend URLs
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 // Health check endpoint (fixed)
